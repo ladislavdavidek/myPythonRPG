@@ -4,8 +4,8 @@ from time import sleep
 
 from enemyTypesLib import enemyTypes as enemyTypes
 
-inputName = "TEST_NAME"#input("What is your name, hero? >>> ")
-patternOfTypes = [4,3,3,2,2,1,1]
+inputName = "PLAYER_NAME" #input("What is your name, hero? >>> ")
+patternOfTypes = [4,3,3,2,2,1]
 indexOfTypes = []
 
 class Enemy:
@@ -114,13 +114,11 @@ class Player:
         self.level = level
         self.nextLevel = nextLevel
         self.dead = dead
-
         
-
 class Game:
     def __init__(self, countOfEnemies):
         self.enemiesList = []
-
+        self.playerStats = 0
         # vyplneni indexu podle patternu pro naslednou generaci nepratel
         for i in range(len(patternOfTypes)):
             for j in range(patternOfTypes[i]):
@@ -131,18 +129,20 @@ class Game:
                 self.enemiesList.append(Enemy(Enemy.generateEnemy(self, indexOfTypes[i])[0], Enemy.generateEnemy(self, indexOfTypes[i])[1], Enemy.generateEnemy(self, indexOfTypes[i])[2], Enemy.generateEnemy(self, indexOfTypes[i])[3], Enemy.generateEnemy(self, indexOfTypes[i])[4]))
             
         # generovani hrace # nemenit !!!!
-        self.hero = Player(inputName, 20, 4, 4, 0, 1, 200, False) 
+        self.hero = Player(inputName, 20, 4, 4, 0, 1, 200, False)
+        self.playerHealth = self.hero.health
 
         # zamichani seznamu nepratel
         shuffle(self.enemiesList) 
         
         print()
-        print(inputName + ", You are in the forrest, where are these creatures:\n")
+        print(inputName + ",\nWelcome in The Forrest,\nwith these monsters:\n")
    
         self.openGame()
 
     def openGame(self):
-        while self.hero.dead == False:
+        while self.hero.dead == False and len(self.enemiesList) > 0:
+            self.hero.health = self.playerHealth
             print("YOUR STATS:\n")
             TextFormatting([["NAME:",self.hero.name],["ATTACK:", self.hero.attack],["DEFENSE:", self.hero.defense],["HEALTH:", self.hero.health],["LEVEL:", self.hero.level],["EXP:", self.hero.experience],["NEXT LVL:", self.hero.nextLevel]])
             print()
@@ -151,57 +151,65 @@ class Game:
             TextFormatting([ ["ENEMY NAME", "AT DF HP"]])
             for i in range(len(self.enemiesList)):
                 TextFormatting([ [str(i+1) + ")"+str(self.enemiesList[i].name), str(str(self.enemiesList[i].attack) + " " + str(self.enemiesList[i].defense) + " " +  str(self.enemiesList[i].health)) ]])
-                #print(str(i+1) + ")"+str(self.enemiesList[i].name), self.enemiesList[i].attack, self.enemiesList[i].defense, self.enemiesList[i].health)
             print()
             # add validation for 'selectedEnemy'
             selectedEnemy = int(input("Select your oponnent >>> "))
             print()
-            self.enemyStats = []
-            # refactor this
-            self.enemyStats.append(self.enemiesList[selectedEnemy-1].name)
-            self.enemyStats.append(self.enemiesList[selectedEnemy-1].attack)
-            self.enemyStats.append(self.enemiesList[selectedEnemy-1].defense)
-            self.enemyStats.append(self.enemiesList[selectedEnemy-1].health)
-            self.enemyStats.append(self.enemiesList[selectedEnemy-1].experience)
-
-            print("You attacked", self.enemyStats[0],"\n")
+            print("You attacked", self.enemiesList[selectedEnemy-1].name,"!\n")
             print(28*"*")
             cycleCount = 0
-            while self.hero.dead == False and self.enemyStats[3] > 0:
-                
-                print("You get hit with power of", self.enemyStats[1])
-                self.hero.health -= self.enemyStats[1]
-                print("Remaining health points: ", self.hero.health)
+            while self.hero.dead == False and self.enemiesList[selectedEnemy-1].health > 0:
+                print(self.enemiesList[selectedEnemy-1].name+"'s attack: ", self.enemiesList[selectedEnemy-1].attack)
+                self.hero.health -= self.enemiesList[selectedEnemy-1].attack
+                print("Your health: ", self.hero.health)
                 if self.hero.health <= 0:
                     cycleCount += 1
                     self.hero.dead = True
                     print(28*"*")
-                    print("YOU died after", cycleCount, "round(s).")
-                    print(28*"*")
+                    sleep(1.5)
+                    print("YOU died after", cycleCount, "hit(s).")
+                    print(28*"*","\n")
+                    sleep(1.5)
                     break
                 print()
-                print("You hit", self.enemyStats[0],"with power of", self.hero.attack)
-                self.enemyStats[3] -= self.hero.attack
+                print("Your attack:", self.hero.attack)
+                self.enemiesList[selectedEnemy-1].health -= self.hero.attack
                 cycleCount += 1
-                print("His emaining health points: ", self.enemyStats[3])
-                if self.enemyStats[3] <= 0:
+                print(self.enemiesList[selectedEnemy-1].name+"'s health: ", self.enemiesList[selectedEnemy-1].health)
+                if self.enemiesList[selectedEnemy-1].health <= 0:
                     print(28*"*")
-                    print(self.enemyStats[0], "died after", cycleCount, "round(s).")
-                    print(28*"*")
+                    sleep(1.5)
+                    print(self.enemiesList[selectedEnemy-1].name, "died after", cycleCount, "hit(s).")
+                    print("You got", self.enemiesList[selectedEnemy-1].experience,"EXPs.")
+                    self.hero.experience += self.enemiesList[selectedEnemy-1].experience
+                    if self.hero.experience >= self.hero.nextLevel:
+                        self.hero.nextLevel += round(self.hero.nextLevel*1.2)
+                        self.hero.level += 1
+                        self.hero.attack+=randint(6,15)
+                        self.hero.defense+=randint(6,15)
+                        self.playerHealth+=randint(6,12)
+                        print(28*"*","\nLEVEL UP!")
+                    print(28*"*","\n")
                     self.enemiesList.remove(self.enemiesList[selectedEnemy-1])
-                    self.enemyStats = []
+                    sleep(1.5)
                     break
-                print()
                 print(28*"*")
                 sleep(1.5)
 
         if self.hero.dead == True:
-            decide = input("Try again? >>> ")
+            decide = input("Try again?  y/n >>> ")
             if decide == "yes" or decide == "y":
                 g = Game(15)
             else:
                 print("Ok, bye.")
+                input("***leave by pressing enter***")
         else:
-            print("Thanks for playing, Champion!")
+            print("You killed all the monsters!\n")
+            print("YOUR FINAL STATS:\n")
+            TextFormatting([["NAME:",self.hero.name],["ATTACK:", self.hero.attack],["DEFENSE:", self.hero.defense],["HEALTH:", self.hero.health],["LEVEL:", self.hero.level],["EXP:", self.hero.experience],["NEXT LVL:", self.hero.nextLevel]])
+            print()
+            print("Thanks 4 playing, Champion!")
 
-g = Game(15)
+            #add next level -> multiplier base enemy stats * stage
+
+g = Game(1)
