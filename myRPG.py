@@ -99,7 +99,8 @@ class Game:
             cycleCount = 0
             while self.hero.health > 0 and self.enemiesList[selectedEnemy-1].health > 0:
                 print(self.enemiesList[selectedEnemy-1].name+"'s attack: ", self.enemiesList[selectedEnemy-1].attack)
-                self.hero.health -= self.enemiesList[selectedEnemy-1].attack
+                # utok na hrace
+                self.hero.health -= (self.enemiesList[selectedEnemy-1].attack - ((self.hero.defense/100)*self.enemiesList[selectedEnemy-1].attack))
                 print("Your health: ", self.hero.health)
                 if self.hero.health <= 0:
                     cycleCount += 1
@@ -112,7 +113,8 @@ class Game:
                     break
                 print()
                 print("Your attack:", self.hero.attack)
-                self.enemiesList[selectedEnemy-1].health -= self.hero.attack
+                # utok na enemaka
+                self.enemiesList[selectedEnemy-1].health -= (self.hero.attack - ((self.enemiesList[selectedEnemy-1].defense/100)*self.hero.attack))
                 cycleCount += 1
                 print(self.enemiesList[selectedEnemy-1].name+"'s health: ", self.enemiesList[selectedEnemy-1].health)
                 if self.enemiesList[selectedEnemy-1].health <= 0:
@@ -135,7 +137,7 @@ class Game:
                 print(28*"*")
                 sleep(1.5)
 
-        if self.hero.dead == True:
+        if self.hero.health < 0:
             decide = input("Try again?  y/n >>> ")
             if decide == "yes" or decide == "y":
                 g = Game(15)
