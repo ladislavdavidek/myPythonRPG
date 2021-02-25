@@ -1,12 +1,15 @@
 from random import randint, shuffle
 from math import floor
 from time import sleep
+import tkinter as tk
 
+# 854x480 window resolution
 from enemyTypesLib import enemyTypes as enemyTypes
 
-inputName = "PLAYER_NAME" #input("What is your name, hero? >>> ")
+inputName = "Ladislav Mocný" #input("What is your name, hero? >>> ")
 patternOfTypes = [4,3,3,2,2,1]
 indexOfTypes = []
+
 
 class Enemy:
     def __init__(self, name: str, health: int, attack: int, defense: int, experience: int):
@@ -16,78 +19,15 @@ class Enemy:
         self.defense = defense
         self.experience = experience
 
-    def calculateStats(self, getDifficulty):
-        difficulty = getDifficulty
+    def generateEnemy(self, difIndex):
+        difficulty = ["Very easy","Easy","Medium","Hard","Very hard","Boss"]
         enemyStats = ["",0,0,0,0]
-        enemyStats[0] = enemyTypes[difficulty]["enemyType"][randint(0,1)]
-        enemyStats[1] = randint(enemyTypes[difficulty]["health"][0], enemyTypes[difficulty]["health"][1])
-        enemyStats[2] = randint(enemyTypes[difficulty]["attack"][0], enemyTypes[difficulty]["attack"][1])
-        enemyStats[3] = randint(enemyTypes[difficulty]["defense"][0], enemyTypes[difficulty]["defense"][1])
-        enemyStats[4] = floor((enemyStats[2] * 3.236 + enemyStats[3] * 2.89 + enemyStats[1] * 2) * 4.56)
-        # return enemyStats
-        pass
-
-    def generateEnemy(self, difficultyIndex):
-        difficulty = ""
-        enemyStats = ["",0,0,0,0]
-
-        # tento humus zrefactorovat!!
-        if difficultyIndex == 0:
-            difficulty = "Very easy"
-            enemyStats[0] = enemyTypes[difficulty]["enemyType"][randint(0,1)]
-            enemyStats[1] = randint(enemyTypes[difficulty]["health"][0], enemyTypes[difficulty]["health"][1])
-            enemyStats[2] = randint(enemyTypes[difficulty]["attack"][0], enemyTypes[difficulty]["attack"][1])
-            enemyStats[3] = randint(enemyTypes[difficulty]["defense"][0], enemyTypes[difficulty]["defense"][1])
-            enemyStats[4] = floor((enemyStats[2] * 3.236 + enemyStats[3] * 2.89 + enemyStats[1] * 2) * 4.56)
-            return enemyStats
-        
-        elif difficultyIndex == 1:
-            difficulty = "Easy"
-            enemyStats[0] = enemyTypes[difficulty]["enemyType"][randint(0,1)]
-            enemyStats[1] = randint(enemyTypes[difficulty]["health"][0], enemyTypes[difficulty]["health"][1])
-            enemyStats[2] = randint(enemyTypes[difficulty]["attack"][0], enemyTypes[difficulty]["attack"][1])
-            enemyStats[3] = randint(enemyTypes[difficulty]["defense"][0], enemyTypes[difficulty]["defense"][1])
-            enemyStats[4] = floor((enemyStats[2] * 3.236 + enemyStats[3] * 2.89 + enemyStats[1] * 2) * 4.56)
-            return enemyStats
-        
-        elif difficultyIndex == 2:
-            difficulty = "Medium"
-            enemyStats[0] = enemyTypes[difficulty]["enemyType"][randint(0,1)]
-            enemyStats[1] = randint(enemyTypes[difficulty]["health"][0], enemyTypes[difficulty]["health"][1])
-            enemyStats[2] = randint(enemyTypes[difficulty]["attack"][0], enemyTypes[difficulty]["attack"][1])
-            enemyStats[3] = randint(enemyTypes[difficulty]["defense"][0], enemyTypes[difficulty]["defense"][1])
-            enemyStats[4] = floor((enemyStats[2] * 3.236 + enemyStats[3] * 2.89 + enemyStats[1] * 2) * 4.56)
-            return enemyStats
-        
-        elif difficultyIndex == 3:
-            difficulty = "Hard"
-            enemyStats[0] = enemyTypes[difficulty]["enemyType"][randint(0,1)]
-            enemyStats[1] = randint(enemyTypes[difficulty]["health"][0], enemyTypes[difficulty]["health"][1])
-            enemyStats[2] = randint(enemyTypes[difficulty]["attack"][0], enemyTypes[difficulty]["attack"][1])
-            enemyStats[3] = randint(enemyTypes[difficulty]["defense"][0], enemyTypes[difficulty]["defense"][1])
-            enemyStats[4] = floor((enemyStats[2] * 3.236 + enemyStats[3] * 2.89 + enemyStats[1] * 2) * 4.56)
-            return enemyStats
-        
-        elif difficultyIndex == 4:
-            difficulty = "Very hard"
-            enemyStats[0] = enemyTypes[difficulty]["enemyType"][randint(0,1)]
-            enemyStats[1] = randint(enemyTypes[difficulty]["health"][0], enemyTypes[difficulty]["health"][1])
-            enemyStats[2] = randint(enemyTypes[difficulty]["attack"][0], enemyTypes[difficulty]["attack"][1])
-            enemyStats[3] = randint(enemyTypes[difficulty]["defense"][0], enemyTypes[difficulty]["defense"][1])
-            enemyStats[4] = floor((enemyStats[2] * 3.236 + enemyStats[3] * 2.89 + enemyStats[1] * 2) * 4.56)
-            return enemyStats
-        
-        elif difficultyIndex == 5:
-            difficulty = "Boss"
-            enemyStats[0] = enemyTypes[difficulty]["enemyType"][randint(0,1)]
-            enemyStats[1] = randint(enemyTypes[difficulty]["health"][0], enemyTypes[difficulty]["health"][1])
-            enemyStats[2] = randint(enemyTypes[difficulty]["attack"][0], enemyTypes[difficulty]["attack"][1])
-            enemyStats[3] = randint(enemyTypes[difficulty]["defense"][0], enemyTypes[difficulty]["defense"][1])
-            enemyStats[4] = floor((enemyStats[2] * 3.236 + enemyStats[3] * 2.89 + enemyStats[1] * 2) * 4.56)
-            return enemyStats
-        else:
-            return "INDEX_OUT_OF_RANGE"
-        
+        enemyStats[0] = enemyTypes[difficulty[difIndex]]["enemyType"][randint(0,1)]
+        enemyStats[1] = randint(enemyTypes[difficulty[difIndex]]["health"][0], enemyTypes[difficulty[difIndex]]["health"][1])
+        enemyStats[2] = randint(enemyTypes[difficulty[difIndex]]["attack"][0], enemyTypes[difficulty[difIndex]]["attack"][1])
+        enemyStats[3] = randint(enemyTypes[difficulty[difIndex]]["defense"][0], enemyTypes[difficulty[difIndex]]["defense"][1])
+        enemyStats[4] = floor((enemyStats[2] * 3.234 + enemyStats[3] * 2.91 + enemyStats[1] * 2.11) * 4.49)
+        return enemyStats
         difficulty = ""
         enemyStats = ["",0,0,0,0]
 
@@ -105,7 +45,7 @@ class TextFormatting:
             self.lengthOfSpace = 0
         
 class Player:
-    def __init__(self, name: str, health: int, attack: int, defense: int, experience: int, level: int, nextLevel: int, dead: bool):
+    def __init__(self, name: str, health: int, attack: int, defense: int, experience: int, level: int, nextLevel: int):
         self.name = name
         self.health = health
         self.attack = attack
@@ -113,7 +53,6 @@ class Player:
         self.experience = experience
         self.level = level
         self.nextLevel = nextLevel
-        self.dead = dead
         
 class Game:
     def __init__(self, countOfEnemies):
@@ -129,19 +68,19 @@ class Game:
                 self.enemiesList.append(Enemy(Enemy.generateEnemy(self, indexOfTypes[i])[0], Enemy.generateEnemy(self, indexOfTypes[i])[1], Enemy.generateEnemy(self, indexOfTypes[i])[2], Enemy.generateEnemy(self, indexOfTypes[i])[3], Enemy.generateEnemy(self, indexOfTypes[i])[4]))
             
         # generovani hrace # nemenit !!!!
-        self.hero = Player(inputName, 20, 4, 4, 0, 1, 200, False)
+        self.hero = Player(inputName, 20, 4, 4, 0, 1, 200)
         self.playerHealth = self.hero.health
 
         # zamichani seznamu nepratel
-        shuffle(self.enemiesList) 
+        #shuffle(self.enemiesList) 
         
         print()
         print(inputName + ",\nWelcome in The Forrest,\nwith these monsters:\n")
    
-        self.openGame()
+        self.openGame()        
 
     def openGame(self):
-        while self.hero.dead == False and len(self.enemiesList) > 0:
+        while self.hero.health > 0 and len(self.enemiesList) > 0:
             self.hero.health = self.playerHealth
             print("YOUR STATS:\n")
             TextFormatting([["NAME:",self.hero.name],["ATTACK:", self.hero.attack],["DEFENSE:", self.hero.defense],["HEALTH:", self.hero.health],["LEVEL:", self.hero.level],["EXP:", self.hero.experience],["NEXT LVL:", self.hero.nextLevel]])
@@ -158,7 +97,7 @@ class Game:
             print("You attacked", self.enemiesList[selectedEnemy-1].name,"!\n")
             print(28*"*")
             cycleCount = 0
-            while self.hero.dead == False and self.enemiesList[selectedEnemy-1].health > 0:
+            while self.hero.health > 0 and self.enemiesList[selectedEnemy-1].health > 0:
                 print(self.enemiesList[selectedEnemy-1].name+"'s attack: ", self.enemiesList[selectedEnemy-1].attack)
                 self.hero.health -= self.enemiesList[selectedEnemy-1].attack
                 print("Your health: ", self.hero.health)
@@ -185,9 +124,9 @@ class Game:
                     if self.hero.experience >= self.hero.nextLevel:
                         self.hero.nextLevel += round(self.hero.nextLevel*1.2)
                         self.hero.level += 1
-                        self.hero.attack+=randint(6,15)
-                        self.hero.defense+=randint(6,15)
-                        self.playerHealth+=randint(6,12)
+                        self.hero.attack+=randint(6,13)
+                        self.hero.defense+=randint(6,14)
+                        self.playerHealth+=randint(6,15)
                         print(28*"*","\nLEVEL UP!")
                     print(28*"*","\n")
                     self.enemiesList.remove(self.enemiesList[selectedEnemy-1])
@@ -209,7 +148,7 @@ class Game:
             TextFormatting([["NAME:",self.hero.name],["ATTACK:", self.hero.attack],["DEFENSE:", self.hero.defense],["HEALTH:", self.hero.health],["LEVEL:", self.hero.level],["EXP:", self.hero.experience],["NEXT LVL:", self.hero.nextLevel]])
             print()
             print("Thanks 4 playing, Champion!")
-
             #add next level -> multiplier base enemy stats * stage
+g = Game(15)
 
-g = Game(1)
+
